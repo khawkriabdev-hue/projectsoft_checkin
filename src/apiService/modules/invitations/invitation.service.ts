@@ -1,23 +1,53 @@
-// src/modules/invitations/invitation.service.ts
+// invitation.service.ts
 
-import crypto from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
+import {
+    CreateInvitationRequest,
+    CreateInvitationResponse,
+    GetInvitationListRequest,
+    GetInvitationListResponse,
+    Invitation,
+} from './invitation.types';
 import { invitationRepository } from './invitation.repository';
 
 export const invitationService = {
-    async create(payload: { email: string; role_id: string }) {
-        const token = crypto.randomBytes(32).toString('hex');
+    async createInvitation(payload: CreateInvitationRequest, adminUserId: string): Promise<CreateInvitationResponse> {
+        const token = uuidv4();
 
-        const redirect_link = `${process.env.FRONTEND_URL}/register?invite=${token}`;
-
-        const invitation = await invitationRepository.create({
+        const invitation: Omit<Invitation, 'invitation_id'> = {
             email: payload.email,
-            role_id: payload.role_id,
             token,
-            redirect_link,
+            redirect_url: payload.redirect_url,
             status: 'PENDING',
-            expired_at: new Date(Date.now() + 7 * 86400000),
-        });
 
-        return invitation;
+            created_by: adminUserId,
+            created_at: new Date().toISOString(),
+
+            expired_at: payload.expired_at,
+        };
+
+        const invitation_id = await invitationRepository.create(invitation);
+
+        const invitationData: Invitation = {
+            invitation_id,
+            ...invitation,
+        };
+
+        return {
+            invitation: invitationData,
+            invitation_link: `${payload.redirect_url}?token=${token}`,
+        };
+    },
+
+    async getInvitationList(payload?: GetInvitationListRequest): Promise<GetInvitationListResponse> {
+        let invitations = await invitationRepository.getList();
+
+        if (payload?.status) {
+            invitations = invitations.filter((item) => item.status === payload.status);
+        }
+
+        return {
+            invitations,
+        };
     },
 };

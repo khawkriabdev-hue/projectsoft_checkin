@@ -10,6 +10,8 @@ import { WeeklySchedule } from 'pages/WeeklySchedule';
 import HomeLanding from 'pages/HomeLanding';
 import Demo from 'pages/Demo';
 import SystemConfig from 'pages/SystemConfig';
+import InvitationPage from 'pages/InvitationPage';
+import RegisterPage from 'pages/RegisterPage';
 
 function RoutesManagement() {
     return (
@@ -28,6 +30,9 @@ function RoutesManagement() {
                 <Route path={`/manage/weekly-schedule`} element={<WeeklySchedule />} />
                 <Route path={`/manage/system-config`} element={<SystemConfig />} />
             </Route>
+            <Route path='/manage/invite' element={<InvitationPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+
             <Route path={`/demo`} element={<Demo />} />
             <Route path={`/privacy`} element={<PrivacyPolicy />} />
             <Route path={'*'} element={<div>Page not found</div>} />
