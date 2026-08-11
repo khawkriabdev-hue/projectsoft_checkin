@@ -38,7 +38,7 @@ function HomeLanding() {
                     sx={{ mb: 2 }}
                 >
                     <AlertTitle>ประกาศ!!!!</AlertTitle>
-                    เสื้อบริษัทใหม่ 2 ตัว ให้ใส่วันจันทร์กับวันศุกร์ เริ่ม 4 พ.ค.
+                    เริ่มใช้ระบบ <a href="https://liff.line.me/2009416445-EWoPzSvk/employee/announcements">Saimai</a> จันทร์ 17 สิงหา เป็นต้นไป
                 </Alert>
                 <TodayCheckIn />
             </Box>
